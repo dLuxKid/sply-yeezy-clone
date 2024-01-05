@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+
+@font-face {
+  font-family: "OCRBStd";
+  src: url("./assets/ocrbstd.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: "OCRBStd", sans-serif;
+}
