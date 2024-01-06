@@ -3,6 +3,10 @@ import { useState } from "react";
 import products from "../assets/data/products";
 import { useCartContext } from "../context/useCartContext";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [currentProductId, setCurrentProductId] = useState(0);
@@ -16,10 +20,9 @@ export default function Home() {
     const handleScroll = () => {
       const sections = document.querySelectorAll(".section");
 
-      sections.forEach((section) => {
+      sections.forEach((section, i) => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
-
         if (
           window.scrollY >= sectionTop &&
           window.scrollY < sectionTop + sectionHeight
@@ -34,8 +37,35 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    let sections = gsap.utils.toArray(".section"),
+      snapTriggers = sections.map((section) =>
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+        })
+      ),
+      snaps = [];
+
+    ScrollTrigger.create({
+      trigger: ".main",
+      start: "top top",
+      end: () =>
+        "+=" +
+        (sections[sections.length - 1].getBoundingClientRect().top -
+          sections[0].getBoundingClientRect().top),
+      onRefresh: (self) => {
+        let distance = self.end - self.start;
+        snapTriggers.forEach(
+          (trigger, i) => (snaps[i] = (trigger.start - self.start) / distance)
+        );
+      },
+      snap: snaps,
+    });
+  }, []);
+
   return (
-    <main className="w-full min-h-screen relative bg-[rgba(241,240,234)] scroll-smooth">
+    <main className="w-full min-h-screen relative bg-[rgba(241,240,234)] scroll-smooth main">
       {products.map((items, i) => (
         <div
           className="w-full h-screen flex items-center justify-center section"

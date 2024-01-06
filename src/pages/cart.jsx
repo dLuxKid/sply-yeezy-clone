@@ -30,7 +30,10 @@ export default function Cart() {
           className="bg-transparent outline-0 border-0 text-sm font-normal text-black flex items-center cursor-pointer disabled:cursor-not-allowed group disabled:text-[#a3a3a3]"
         >
           DELIVERY ROOM
-          <span className="group-disabled:fill-[#a3a3a3] fill-black">
+          <span
+            className="group-disabled:fill-[#a3a3a3] fill-blac    
+          "
+          >
             <svg
               style={{ width: "25px", height: "10px" }}
               id="Layer_2"
