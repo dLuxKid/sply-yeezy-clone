@@ -5,6 +5,8 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
+  /* outline: 1px solid red; */
 }
 
 *::-webkit-scrollbar {
@@ -29,4 +31,16 @@
 
 body {
   font-family: "OCRBStd", sans-serif;
+}
+
+button {
+  @apply bg-transparent outline-0 border-0 text-sm font-normal text-black flex items-center cursor-pointer disabled:cursor-not-allowed disabled:text-[#a3a3a3];
+}
+
+p {
+  @apply text-sm font-normal text-black;
+}
+
+input {
+  @apply text-[#a3a3a3] placeholder:text-[#a3a3a3] bg-transparent ease-in-out duration-200 transition-all border-0 outline-0 focus:border-b focus:border-b-black py-2 w-full;
 }

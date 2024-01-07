@@ -5,6 +5,7 @@ import { useCartContext } from "../context/useCartContext";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ArrowIcon from "../assets/arrow-icon";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,21 +14,23 @@ export default function Home() {
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [selectedSize, setSelectedSize] = useState(1);
 
-  const { cart } = useCartContext();
+  const { cart, addToCart } = useCartContext();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     const handleScroll = () => {
       const sections = document.querySelectorAll(".section");
 
-      sections.forEach((section, i) => {
+      sections.forEach((section) => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
+
         if (
           window.scrollY >= sectionTop &&
           window.scrollY < sectionTop + sectionHeight
         ) {
           setCurrentProductId(Number(section.id));
+          setSelectedSize(1);
+          setShowSizeGuide(false);
         }
       });
     };
@@ -43,6 +46,7 @@ export default function Home() {
         ScrollTrigger.create({
           trigger: section,
           start: "top top",
+          duration: 0,
         })
       ),
       snaps = [];
@@ -81,7 +85,7 @@ export default function Home() {
       ))}
       <div className="fixed left-[4.5rem] z-[100] bottom-[4.5rem] flex flex-col gap-3 items-start justify-center">
         <Link to={"/cart"}>
-          <p className="text-sm font-normal text-black">
+          <p>
             SPLY{" "}
             {!!cart.totalQuantity && <span>BAG ({cart.totalQuantity})</span>}
           </p>
@@ -92,23 +96,21 @@ export default function Home() {
               <span>{products[currentProductId].name}</span>
               <span>{products[currentProductId].price}</span>
             </p>
-            <p className="text-sm font-normal text-black">
-              DELIVERY WITHIN 4 WEEKS
-            </p>
+            <p>DELIVERY WITHIN 4 WEEKS</p>
             {showSizeGuide && (
               <ul
                 className={`flex ${
                   products[currentProductId].type === "shoe"
                     ? "flex-col"
                     : "flex-row"
-                } gap-2 text-sm font-normal text-black duration-300 transform-cpu transition-all ease-out`}
+                } gap-2 duration-300 transform-cpu transition-all ease-out`}
               >
                 {products[currentProductId].sizeGuard.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
               </ul>
             )}
-            <p className="text-sm font-normal text-black flex gap-2.5">
+            <p className=" flex gap-2.5">
               <span>SIZE</span>
               <span
                 onClick={() => setSelectedSize(1)}
@@ -149,40 +151,31 @@ export default function Home() {
             </p>
             <button
               type="button"
-              className="bg-transparent outline-0 border-0 text-sm font-normal text-black flex items-center"
+              onClick={() =>
+                addToCart({
+                  id: products[currentProductId].id,
+                  name: products[currentProductId].name,
+                  size: selectedSize,
+                  price: products[currentProductId].price,
+                  img: products[currentProductId].img,
+                })
+              }
             >
               ORDER
-              <span>
-                <svg
-                  style={{ width: "25px", height: "10px" }}
-                  id="Layer_2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16.81 17.4"
-                >
-                  <defs>
-                    <style>{`.cls-1{stroke-width:0px;}`}</style>
-                  </defs>
-                  <polygon
-                    className="cls-1"
-                    points="7.43 .11 6 1.65 12.45 7.65 .15 7.65 .15 9.75 12.46 9.75 6 15.75 7.43 17.29 16.67 8.7 7.43 .11"
-                  />
-                </svg>
-              </span>
+              <ArrowIcon />
             </button>
           </>
         )}
         {!products[currentProductId].price && (
-          <button
-            type="button"
-            className="bg-transparent outline-0 border-0 text-sm font-normal text-black flex items-center"
-          >
+          <button type="button">
             VULTURES
             <span>
               <svg
-                style={{ width: "25px", height: "10px" }}
                 id="Layer_2"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16.81 17.4"
+                width={25}
+                height={10}
               >
                 <defs>
                   <style>{`.cls-1{stroke-width:0px;}`}</style>
