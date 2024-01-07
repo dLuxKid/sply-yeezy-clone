@@ -85,6 +85,13 @@ export const CartProvider = ({ children }) => {
         cartItems: updatedCartItem,
         totalQuantity: updatedTotalQty,
       });
+      localStorage.setItem(
+        "cart",
+        JSON.stringify({
+          cartItems: updatedCartItem,
+          totalQuantity: updatedTotalQty,
+        })
+      );
     } else {
       const updatedCartItem = prevItemsInCart.map((item) =>
         item.id === id && item.size === size
@@ -95,14 +102,14 @@ export const CartProvider = ({ children }) => {
         cartItems: updatedCartItem,
         totalQuantity: updatedTotalQty,
       });
+      localStorage.setItem(
+        "cart",
+        JSON.stringify({
+          cartItems: updatedCartItem,
+          totalQuantity: updatedTotalQty,
+        })
+      );
     }
-    localStorage.setItem(
-      "cart",
-      JSON.stringify({
-        cartItems: updatedCartItem,
-        totalQuantity: updatedTotalQty,
-      })
-    );
   };
 
   useEffect(() => {
